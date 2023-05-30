@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">PlacarFutebol</string>
+    <string name="create_match">Criação de Partida</string>
+    <string name="overtime">Prorrogação</string>
+</resources>
