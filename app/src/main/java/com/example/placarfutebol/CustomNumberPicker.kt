@@ -13,6 +13,7 @@ class CustomNumberPicker(private val newNumberPicker: NumberPicker, private val 
     init {
         newNumberPicker.minValue = minValue
         newNumberPicker.maxValue = maxValue
+        newNumberPicker.wrapSelectorWheel = false
     }
 
 }

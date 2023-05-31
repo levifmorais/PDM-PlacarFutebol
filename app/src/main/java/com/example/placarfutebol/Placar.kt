@@ -1,51 +1,72 @@
 package com.example.placarfutebol
 
 import android.annotation.SuppressLint
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.CountDownTimer
 import android.widget.TextView
+import android.widget.ToggleButton
+import androidx.appcompat.app.AppCompatActivity
 
 class Placar : AppCompatActivity() {
 
     private lateinit var countUpTimer: CountDownTimer
     private lateinit var timeTextView : TextView
+    private lateinit var btnStart : ToggleButton
+    private lateinit var golTimeUm : CustomNumberPicker
+    private lateinit var golTimeDois : CustomNumberPicker
+    private var isPaused : Boolean = false
+    private var counter : Int = 0
+    @SuppressLint("SetTextI18n")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_placar)
 
-        timeTextView = findViewById<TextView>(R.id.duracaoDePartida)
+        golTimeUm = CustomNumberPicker(findViewById(R.id.golUm), 0, 99)
+        golTimeDois = CustomNumberPicker(findViewById(R.id.golDois), 0, 99)
+
+
+        timeTextView = findViewById(R.id.duracaoDePartida)
 
         timeTextView.text = "00:00"
 
         val timeMatch = intent.getIntExtra("timeMatch", 0)
 
+        btnStart = findViewById(R.id.btnStartTimer)
 
-        val btnStart = findViewById<TextView>(R.id.btnStartTimer)
+        val duration : Long = timeMatch.toLong() * 60 * 1000
+        val timeMinutes = timeMatch * 60
+
+        startCountUpTimer(duration, timeMinutes)
 
         btnStart.setOnClickListener {
-            startCountUpTimer(timeMatch.toLong() * 60 * 1000)
+            if (isPaused) {
+                resumeCountUpTimer()
+                btnStart.text = "Pause"
+            } else {
+                pauseCountUpTimer()
+                btnStart.text = "Resume"
+            }
         }
     }
 
-    private fun startCountUpTimer(duration: Long) {
-        var counter = 0
+    // TODO: Transformar em Classe
+    private fun startCountUpTimer(duration: Long, timeMinutes : Int) {
+        counter = 0
 
         countUpTimer = object : CountDownTimer(duration, 1000) {
             override fun onTick(millisUntilFinished: Long) {
-                counter++
-                val minutes = counter / 60
-                val seconds = counter % 60
-                val timeElapsedFormatted = String.format("%02d:%02d", minutes, seconds)
-                timeTextView.text = timeElapsedFormatted
+                if (!isPaused) {
 
-                if (counter >= 90) {
-                    stopCountUpTimer()
+                    counter++
+                    val minutes = counter / 60
+                    val seconds = counter % 60
+                    val timeElapsedFormatted = String.format("%02d:%02d", minutes, seconds)
+                    timeTextView.text = timeElapsedFormatted
+
+                    if (counter >= timeMinutes) {
+                        stopCountUpTimer()
+                    }
                 }
-            }
-
-            private fun stopCountUpTimer() {
-                countUpTimer.cancel()
             }
 
             @SuppressLint("SetTextI18n")
@@ -56,6 +77,20 @@ class Placar : AppCompatActivity() {
         }
 
         countUpTimer.start()
+    }
+
+    private fun pauseCountUpTimer() {
+        isPaused = true
+        countUpTimer.cancel()
+    }
+
+    private fun resumeCountUpTimer() {
+        isPaused = false
+        countUpTimer.start()
+    }
+
+    private fun stopCountUpTimer() {
+        countUpTimer.cancel()
     }
 
     override fun onDestroy() {
