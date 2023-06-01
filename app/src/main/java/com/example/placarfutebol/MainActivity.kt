@@ -23,9 +23,12 @@ class MainActivity : AppCompatActivity(), CriacaoPartidaDialogListener {
 
     }
 
-    override fun onDialogPositiveClick(timeMatch: Int) {
+    // Variaveis que serao passadas para a activity Placar
+    override fun onDialogPositiveClick(timeMatch: Int, editNomeTimeUm: String, editNomeTimeDois: String) {
         val intent = Intent(this, Placar::class.java)
         intent.putExtra("timeMatch", timeMatch)
+        intent.putExtra("editNomeTimeUm", editNomeTimeUm)
+        intent.putExtra("editNomeTimeDois", editNomeTimeDois)
         startActivity(intent)
     }
 }
