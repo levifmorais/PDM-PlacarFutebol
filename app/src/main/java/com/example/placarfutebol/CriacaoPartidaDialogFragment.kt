@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.widget.EditText
 import android.widget.ImageView
 import androidx.fragment.app.DialogFragment
+import com.google.android.material.snackbar.Snackbar
 
 /*
     Esta classe cria um dialog para configurar a partida
@@ -49,13 +50,21 @@ interface CriacaoPartidaDialogListener {
 
                     // Pega as variaveis que serao Intent e as transforma
                     val timeMatch = view.findViewById<EditText>(R.id.tempoTextNumber)
-                    val editNomeTimeUm = view.findViewById<EditText>(R.id.editNomeTimeUm)
-                    val editNomeTimeDois = view.findViewById<EditText>(R.id.editNomeTimeDois)
 
-                    dialogListener?.onDialogPositiveClick(timeMatch.text.toString().toInt(),
-                        editNomeTimeUm.text.toString(),
-                        editNomeTimeDois.text.toString())
+                    if (timeMatch.text.isEmpty()) {
+                        val snackbar = Snackbar.make(view, "Preencha a duração da partida", Snackbar.LENGTH_SHORT)
+                        snackbar.show()
+                    }
+                    else {
+                        val editNomeTimeUm = view.findViewById<EditText>(R.id.editNomeTimeUm)
+                        val editNomeTimeDois = view.findViewById<EditText>(R.id.editNomeTimeDois)
 
+                        dialogListener?.onDialogPositiveClick(
+                            timeMatch.text.toString().toInt(),
+                            editNomeTimeUm.text.toString(),
+                            editNomeTimeDois.text.toString()
+                        )
+                    }
                 }
                 .setNegativeButton("Cancelar"
                 ) { _, _ ->
