@@ -77,10 +77,6 @@
                     android:layout_weight="1"
                     tools:srcCompat="@tools:sample/avatars" />
 
-                <NumberPicker
-                    android:id="@+id/quantidadeJogadoresUm"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
             </LinearLayout>
 
             <ImageView
@@ -115,11 +111,6 @@
                     android:layout_weight="1"
                     tools:srcCompat="@tools:sample/avatars" />
 
-                <NumberPicker
-                    android:id="@+id/quantidadeJogadoresDois"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1" />
             </LinearLayout>
 
         </LinearLayout>

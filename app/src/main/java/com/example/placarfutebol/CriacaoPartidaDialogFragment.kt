@@ -41,9 +41,6 @@ interface CriacaoPartidaDialogListener {
 
             imageTeamOne.setImageDrawable(null);imageTeamTwo.setImageDrawable(null)
 
-            val playersOne = CustomNumberPicker(view.findViewById(R.id.quantidadeJogadoresUm), 1, 11)
-            val playersTwo = CustomNumberPicker(view.findViewById(R.id.quantidadeJogadoresDois), 1, 11)
-
             builder.setView(view)
                 .setPositiveButton("Pronto"
                 ) { _, _ ->
