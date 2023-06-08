@@ -6,10 +6,20 @@ import android.content.Context
 import android.content.pm.PackageManager
 import android.os.CountDownTimer
 import android.os.Vibrator
+import android.util.Log
 import android.widget.TextView
 import androidx.core.content.ContextCompat
 
-class CountUpTimer (private val textView: TextView, private val acrescimoView: TextView, private val context: Context, private val duration: Long, private val timeMinutes : Int) {
+interface CountUpListener {
+    fun onGameEnd()
+
+    fun onIncrementStart()
+
+    fun changeTime()
+}
+
+class CountUpTimer (private val textView: TextView, private val acrescimoView: TextView, private val context: Context,
+                    private val listener: CountUpListener, private val duration: Long, private val timeMinutes : Int, private val prorroga : Boolean) {
 
     private var isPaused : Boolean = true
     private var counter : Int = 0
@@ -30,8 +40,14 @@ class CountUpTimer (private val textView: TextView, private val acrescimoView: T
                     val timeElapsedFormatted = String.format("%02d:%02d", minutes, seconds)
                     textView.text = timeElapsedFormatted
 
-                    if (counter >= timeMinutes) {
+                    Log.d("CountUpTimer", "$prorroga")
+                    if (counter >= timeMinutes && !prorroga) {
                         stop()
+                        listener.onGameEnd()
+                    }
+                    if (counter >= (timeMinutes + (timeMinutes * 0.15).toInt()) && prorroga) {
+                        stop()
+                        listener.onGameEnd()
                     }
 
                     // TODO: Precisa ativar o toggleButton
@@ -44,6 +60,7 @@ class CountUpTimer (private val textView: TextView, private val acrescimoView: T
                             vibrator.vibrate(pattern, repeatIndex)
                         }
                         startIncrementTimer()
+                        pause()
                     }
                 }
             }
@@ -102,7 +119,15 @@ class CountUpTimer (private val textView: TextView, private val acrescimoView: T
             }
         }
 
+        listener.onIncrementStart()
         incrementTimer.start()
+    }
+
+    fun resetIncrementTimer() {
+        if (::incrementTimer.isInitialized) {
+            incrementTimer.cancel()
+            acrescimoView.text = ""
+        }
     }
 
 }

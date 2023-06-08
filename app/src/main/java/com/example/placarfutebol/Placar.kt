@@ -1,21 +1,17 @@
 package com.example.placarfutebol
 
-import android.Manifest
 import android.annotation.SuppressLint
-import android.content.Context
+import android.content.Intent
 import android.content.pm.ActivityInfo
-import android.content.pm.PackageManager
 import android.os.Bundle
-import android.os.CountDownTimer
-import android.os.Vibrator
+import android.util.Log
+import android.widget.Button
 import android.widget.TextView
 import android.widget.ToggleButton
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.content.ContextCompat
 
 
-class Placar : AppCompatActivity() {
-    private lateinit var countUpTimer: CountDownTimer
+class Placar : AppCompatActivity(), CountUpListener {
     private lateinit var timeTextView : TextView
     private lateinit var intervaloTextView : TextView
     private lateinit var acrescimosTextView: TextView
@@ -25,11 +21,20 @@ class Placar : AppCompatActivity() {
     private lateinit var golTimeUm : CustomNumberPicker
     private lateinit var golTimeDois : CustomNumberPicker
     private lateinit var timer : CountUpTimer
+    private lateinit var btnGameEnd : Button
+    private lateinit var btnIntervalo : Button
 
     @SuppressLint("SetTextI18n")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_placar)
+
+
+        btnIntervalo = findViewById(R.id.btnIntervalo)
+        btnIntervalo.visibility = Button.GONE
+
+        btnGameEnd = findViewById(R.id.btnGameEnd)
+        btnGameEnd.visibility = Button.GONE
 
         requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE
 
@@ -47,6 +52,8 @@ class Placar : AppCompatActivity() {
         nomeTimeUm.text = editNomeTimeUm
         nomeTimeDois.text = editNomeTimeDois
 
+        val switchProrrogaChecked = intent.getBooleanExtra("switchProrrogaChecked", false)
+
         // Inicializa o intervalo
         intervaloTextView = findViewById(R.id.tempoDePartida)
 
@@ -62,14 +69,13 @@ class Placar : AppCompatActivity() {
 
         acrescimosTextView.text = ""
 
-
         val timeMatch = intent.getIntExtra("timeMatch", 0) * 60
 
         btnStart = findViewById(R.id.btnStartTimer)
 
         val duration : Long = timeMatch.toLong() * 60 * 1000
 
-        timer = CountUpTimer(timeTextView, acrescimosTextView, this, duration, timeMatch)
+        timer = CountUpTimer(timeTextView, acrescimosTextView, this, this, duration, timeMatch, switchProrrogaChecked)
         timer.start()
 
         // Pausa a partida
@@ -83,6 +89,37 @@ class Placar : AppCompatActivity() {
             }
         }
 
+        btnGameEnd.setOnClickListener {
+            val resultado = StackResultado(nomeTimeUm.text.toString(), nomeTimeDois.text.toString(), golTimeUm.getValue(), golTimeDois.getValue())
+            StackResultados.push(resultado)
+            Log.d("StackResultados", StackResultados.peek().toString())
+            val intent = Intent(this, MainActivity::class.java)
+            startActivity(intent)
+        }
+
+        btnIntervalo.setOnClickListener {
+            timer.resetIncrementTimer()
+            intervaloTextView.text = "2°"
+            btnStart.visibility = ToggleButton.VISIBLE
+            btnIntervalo.visibility = Button.GONE
+
+        }
+
+    }
+
+    override fun onGameEnd() {
+        btnGameEnd.visibility = Button.VISIBLE
+        btnStart.visibility = ToggleButton.GONE
+    }
+
+    override fun onIncrementStart() {
+        btnStart.toggle()
+        btnIntervalo.visibility = Button.VISIBLE
+        btnStart.visibility = ToggleButton.GONE
+    }
+
+    override fun changeTime() {
+        TODO("Not yet implemented")
     }
 
 }

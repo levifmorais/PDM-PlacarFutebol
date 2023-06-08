@@ -124,7 +124,7 @@
         android:gravity="center"
         android:orientation="horizontal">
 
-        <Switch
+        <androidx.appcompat.widget.SwitchCompat
             android:id="@+id/switchProrrogacao"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -141,11 +141,28 @@
         android:gravity="center"
         android:orientation="horizontal">
 
-        <Switch
+        <androidx.appcompat.widget.SwitchCompat
             android:id="@+id/switchPenalti"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Penâltis"
+            android:textSize="16sp" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/Local"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:gravity="center"
+        android:orientation="horizontal">
+
+        <androidx.appcompat.widget.SwitchCompat
+            android:id="@+id/switchLocal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Salvar local da partida"
             android:textSize="16sp" />
 
     </LinearLayout>

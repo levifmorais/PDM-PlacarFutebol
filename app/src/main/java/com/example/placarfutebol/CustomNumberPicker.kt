@@ -16,4 +16,7 @@ class CustomNumberPicker(private val newNumberPicker: NumberPicker, private val 
         newNumberPicker.wrapSelectorWheel = false
     }
 
+    fun getValue(): Int {
+        return newNumberPicker.value
+    }
 }

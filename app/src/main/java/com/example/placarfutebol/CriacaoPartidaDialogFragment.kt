@@ -1,10 +1,16 @@
 package com.example.placarfutebol
 
+import android.app.Activity
 import android.app.AlertDialog
 import android.app.Dialog
 import android.os.Bundle
+import android.util.Log
+import android.view.View
 import android.widget.EditText
 import android.widget.ImageView
+import android.widget.LinearLayout
+import android.widget.Switch
+import androidx.appcompat.widget.SwitchCompat
 import androidx.fragment.app.DialogFragment
 import com.google.android.material.snackbar.Snackbar
 
@@ -18,7 +24,7 @@ import com.google.android.material.snackbar.Snackbar
 
 // Listener que envia a configuracao da partida para a activity de Placar
 interface CriacaoPartidaDialogListener {
-    fun onDialogPositiveClick(timeMatch : Int, editNomeTimeUm : String, editNomeTimeDois : String)
+    fun onDialogPositiveClick(timeMatch : Int, editNomeTimeUm : String, editNomeTimeDois : String, switchProrrogaChecked : Boolean)
 }
  class CriacaoPartidaDialogFragment : DialogFragment() {
 
@@ -39,6 +45,11 @@ interface CriacaoPartidaDialogListener {
             val imageTeamOne = view.findViewById<ImageView>(R.id.imagemTimeUm)
             val imageTeamTwo = view.findViewById<ImageView>(R.id.imagemTimeDois)
 
+            val switchLocal = view.findViewById<LinearLayout>(R.id.Local)
+            switchLocal.visibility = View.GONE
+
+            val switchProrroga = view.findViewById<SwitchCompat>(R.id.switchProrrogacao)
+
             imageTeamOne.setImageDrawable(null);imageTeamTwo.setImageDrawable(null)
 
             builder.setView(view)
@@ -49,7 +60,8 @@ interface CriacaoPartidaDialogListener {
                     val timeMatch = view.findViewById<EditText>(R.id.tempoTextNumber)
 
                     if (timeMatch.text.isEmpty()) {
-                        val snackbar = Snackbar.make(view, "Preencha a duração da partida", Snackbar.LENGTH_SHORT)
+                        val activityView = (context as Activity).window.decorView.findViewById<View>(android.R.id.content)
+                        val snackbar = Snackbar.make(activityView, "Preencha a duração da partida", Snackbar.LENGTH_INDEFINITE)
                         snackbar.show()
                     }
                     else {
@@ -59,7 +71,8 @@ interface CriacaoPartidaDialogListener {
                         dialogListener?.onDialogPositiveClick(
                             timeMatch.text.toString().toInt(),
                             editNomeTimeUm.text.toString(),
-                            editNomeTimeDois.text.toString()
+                            editNomeTimeDois.text.toString(),
+                            switchProrroga.isChecked
                         )
                     }
                 }

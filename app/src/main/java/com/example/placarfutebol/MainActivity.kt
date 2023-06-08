@@ -12,23 +12,39 @@ class MainActivity : AppCompatActivity(), CriacaoPartidaDialogListener {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        val dialog = CriacaoPartidaDialogFragment()
-        dialog.dialogListener = this
+        val dialogCriacaoPartida = CriacaoPartidaDialogFragment()
+        dialogCriacaoPartida.dialogListener = this
+
+        val dialogHistorico = HistoricoDialog(this)
+
         val btnCriarPartida : Button = findViewById(R.id.btnCriarPartida)
 
-        // Mostra o dialog para criar a partida
+        val btnHistorico : Button = findViewById(R.id.historico)
+
+        // Mostra o dialogCriacaoPartida para criar a partida
         btnCriarPartida.setOnClickListener {
-            dialog.show(supportFragmentManager, "CriacaoPartidaDialogFragment")
+            dialogCriacaoPartida.show(supportFragmentManager, "CriacaoPartidaDialogFragment")
+        }
+
+        // Mostra o historico de partidas
+        btnHistorico.setOnClickListener {
+            dialogHistorico.show(supportFragmentManager, "HistoricoDialog")
         }
 
     }
 
     // Variaveis que serao passadas para a activity Placar
-    override fun onDialogPositiveClick(timeMatch: Int, editNomeTimeUm: String, editNomeTimeDois: String) {
+    override fun onDialogPositiveClick(
+        timeMatch: Int,
+        editNomeTimeUm: String,
+        editNomeTimeDois: String,
+        switchProrrogaChecked: Boolean
+    ) {
         val intent = Intent(this, Placar::class.java)
         intent.putExtra("timeMatch", timeMatch)
         intent.putExtra("editNomeTimeUm", editNomeTimeUm)
         intent.putExtra("editNomeTimeDois", editNomeTimeDois)
+        intent.putExtra("switchProrrogaChecked", switchProrrogaChecked)
         startActivity(intent)
     }
 }

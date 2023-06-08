@@ -112,12 +112,34 @@
 
         </LinearLayout>
 
-        <ToggleButton
-            android:id="@+id/btnStartTimer"
+        <LinearLayout
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:layout_gravity="center"
-            android:layout_weight="1"
-            android:text="Button" />
+            android:orientation="horizontal">
+
+            <ToggleButton
+                android:id="@+id/btnStartTimer"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_weight="1"
+                android:text="Button" />
+
+            <Button
+                android:id="@+id/btnIntervalo"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Encerrar" />
+
+            <Button
+                android:id="@+id/btnGameEnd"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text="Encerrar Partida" />
+        </LinearLayout>
+
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
