@@ -108,11 +108,7 @@ class Placar : AppCompatActivity(), CountUpListener {
                 intervalo += 1
             }
             else if(intervalo == 1 && !switchProrrogaChecked || intervalo == 2) {
-                val resultado = StackResultado(nomeTimeUm.text.toString(), nomeTimeDois.text.toString(), golTimeUm.getValue(), golTimeDois.getValue())
-                StackResultados.push(resultado)
-                Log.d("StackResultados", StackResultados.peek().toString())
-                val intent = Intent(this, MainActivity::class.java)
-                startActivity(intent)
+                sendResult()
             }
             else if (intervalo == 1 && switchProrrogaChecked){
                 intervaloTextView.text = "PRORROGAÇÃO"
@@ -127,6 +123,7 @@ class Placar : AppCompatActivity(), CountUpListener {
     override fun onGameEnd() {
         btnGameEnd.visibility = Button.VISIBLE
         btnStart.visibility = ToggleButton.GONE
+        sendResult()
     }
 
     override fun onIncrementStart() {
@@ -139,4 +136,11 @@ class Placar : AppCompatActivity(), CountUpListener {
         TODO("Not yet implemented")
     }
 
+    private fun sendResult() {
+        val resultado = StackResultado(nomeTimeUm.text.toString(), nomeTimeDois.text.toString(), golTimeUm.getValue(), golTimeDois.getValue())
+        StackResultados.push(resultado)
+        StackResultados.save(this)
+        val intent = Intent(this, MainActivity::class.java)
+        startActivity(intent)
+    }
 }

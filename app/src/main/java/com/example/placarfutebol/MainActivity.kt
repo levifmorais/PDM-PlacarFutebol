@@ -12,6 +12,8 @@ class MainActivity : AppCompatActivity(), CriacaoPartidaDialogListener {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
+        StackResultados.load(this)
+
         val dialogCriacaoPartida = CriacaoPartidaDialogFragment()
         dialogCriacaoPartida.dialogListener = this
 

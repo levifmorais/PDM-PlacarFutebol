@@ -3,6 +3,8 @@ package com.example.placarfutebol
 import android.app.Activity
 import android.app.AlertDialog
 import android.app.Dialog
+import android.content.Context
+import android.content.SharedPreferences
 import android.os.Bundle
 import android.util.Log
 import android.view.View
@@ -26,61 +28,67 @@ import com.google.android.material.snackbar.Snackbar
 interface CriacaoPartidaDialogListener {
     fun onDialogPositiveClick(timeMatch : Int, editNomeTimeUm : String, editNomeTimeDois : String, switchProrrogaChecked : Boolean)
 }
- class CriacaoPartidaDialogFragment : DialogFragment() {
+class CriacaoPartidaDialogFragment : DialogFragment() {
 
+    private lateinit var sharedPreferences: SharedPreferences
+    var dialogListener: CriacaoPartidaDialogListener? = null
 
-     // TODO: Salvar a ultima configuracao de partida
-
-     var dialogListener: CriacaoPartidaDialogListener? = null
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-
+        sharedPreferences = requireContext().getSharedPreferences("dialog_states", Context.MODE_PRIVATE)
 
         return activity?.let {
-
             val builder = AlertDialog.Builder(it)
-
             val inflater = requireActivity().layoutInflater
             val view = inflater.inflate(R.layout.dialog_config_partida, null)
 
             val imageTeamOne = view.findViewById<ImageView>(R.id.imagemTimeUm)
             val imageTeamTwo = view.findViewById<ImageView>(R.id.imagemTimeDois)
-
             val switchLocal = view.findViewById<LinearLayout>(R.id.Local)
             switchLocal.visibility = View.GONE
-
             val switchProrroga = view.findViewById<SwitchCompat>(R.id.switchProrrogacao)
 
-            imageTeamOne.setImageDrawable(null);imageTeamTwo.setImageDrawable(null)
+            imageTeamOne.setImageDrawable(null)
+            imageTeamTwo.setImageDrawable(null)
+
+            val timeMatchEditText = view.findViewById<EditText>(R.id.tempoTextNumber)
+            val editNomeTimeUmEditText = view.findViewById<EditText>(R.id.editNomeTimeUm)
+            val editNomeTimeDoisEditText = view.findViewById<EditText>(R.id.editNomeTimeDois)
+
+            val savedTimeMatch = sharedPreferences.getInt("timeMatch", 0)
+            val savedEditNomeTimeUm = sharedPreferences.getString("editNomeTimeUm", "")
+            val savedEditNomeTimeDois = sharedPreferences.getString("editNomeTimeDois", "")
+            val savedSwitchProrrogaChecked = sharedPreferences.getBoolean("switchProrrogaChecked", false)
+
+            timeMatchEditText.setText(savedTimeMatch.toString())
+            editNomeTimeUmEditText.setText(savedEditNomeTimeUm)
+            editNomeTimeDoisEditText.setText(savedEditNomeTimeDois)
+            switchProrroga.isChecked = savedSwitchProrrogaChecked
 
             builder.setView(view)
-                .setPositiveButton("Pronto"
-                ) { _, _ ->
+                .setPositiveButton("Pronto") { _, _ ->
+                    val timeMatch = timeMatchEditText.text.toString().toIntOrNull()
+                    val editNomeTimeUm = editNomeTimeUmEditText.text.toString()
+                    val editNomeTimeDois = editNomeTimeDoisEditText.text.toString()
 
-                    // Pega as variaveis que serao Intent e as transforma
-                    val timeMatch = view.findViewById<EditText>(R.id.tempoTextNumber)
-
-                    if (timeMatch.text.isEmpty()) {
+                    if (timeMatch == null || editNomeTimeUm.isEmpty() || editNomeTimeDois.isEmpty()) {
                         val activityView = (context as Activity).window.decorView.findViewById<View>(android.R.id.content)
-                        val snackbar = Snackbar.make(activityView, "Preencha a duração da partida", Snackbar.LENGTH_INDEFINITE)
+                        val snackbar = Snackbar.make(activityView, "Preencha todos os campos", Snackbar.LENGTH_INDEFINITE)
                         snackbar.show()
-                    }
-                    else {
-                        val editNomeTimeUm = view.findViewById<EditText>(R.id.editNomeTimeUm)
-                        val editNomeTimeDois = view.findViewById<EditText>(R.id.editNomeTimeDois)
+                    } else {
+                        val editor = sharedPreferences.edit()
+                        editor.putInt("timeMatch", timeMatch)
+                        editor.putString("editNomeTimeUm", editNomeTimeUm)
+                        editor.putString("editNomeTimeDois", editNomeTimeDois)
+                        editor.putBoolean("switchProrrogaChecked", switchProrroga.isChecked)
+                        editor.apply()
 
-                        dialogListener?.onDialogPositiveClick(
-                            timeMatch.text.toString().toInt(),
-                            editNomeTimeUm.text.toString(),
-                            editNomeTimeDois.text.toString(),
-                            switchProrroga.isChecked
-                        )
+                        dialogListener?.onDialogPositiveClick(timeMatch, editNomeTimeUm, editNomeTimeDois, switchProrroga.isChecked)
                     }
                 }
-                .setNegativeButton("Cancelar"
-                ) { _, _ ->
+                .setNegativeButton("Cancelar") { _, _ ->
                     // User cancelled the dialog
                 }
-            // Create the AlertDialog object and return it
+
             builder.create()
         } ?: throw IllegalStateException("Activity cannot be null")
     }
