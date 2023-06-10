@@ -97,12 +97,29 @@ class Placar : AppCompatActivity(), CountUpListener {
             startActivity(intent)
         }
 
+
+        var intervalo = 0
         btnIntervalo.setOnClickListener {
             timer.resetIncrementTimer()
-            intervaloTextView.text = "2°"
-            btnStart.visibility = ToggleButton.VISIBLE
-            btnIntervalo.visibility = Button.GONE
-
+            if (intervalo == 0) {
+                intervaloTextView.text = "2°"
+                btnStart.visibility = ToggleButton.VISIBLE
+                btnIntervalo.visibility = Button.GONE
+                intervalo += 1
+            }
+            else if(intervalo == 1 && !switchProrrogaChecked || intervalo == 2) {
+                val resultado = StackResultado(nomeTimeUm.text.toString(), nomeTimeDois.text.toString(), golTimeUm.getValue(), golTimeDois.getValue())
+                StackResultados.push(resultado)
+                Log.d("StackResultados", StackResultados.peek().toString())
+                val intent = Intent(this, MainActivity::class.java)
+                startActivity(intent)
+            }
+            else if (intervalo == 1 && switchProrrogaChecked){
+                intervaloTextView.text = "PRORROGAÇÃO"
+                btnStart.visibility = ToggleButton.VISIBLE
+                btnIntervalo.visibility = Button.GONE
+                intervalo += 1
+            }
         }
 
     }

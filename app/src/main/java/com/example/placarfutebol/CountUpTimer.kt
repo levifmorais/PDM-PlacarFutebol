@@ -25,10 +25,18 @@ class CountUpTimer (private val textView: TextView, private val acrescimoView: T
     private var counter : Int = 0
     private var vibrator : Vibrator = context.getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
     private lateinit var incrementTimer: CountDownTimer
+    private lateinit var overtimeTimer: CountDownTimer
     private lateinit var countUpTimer: CountDownTimer
 
     fun start() {
         counter = 0
+
+        // MUDAR NO PROPRIO TIMER PARA INICIAR A PRORROGACAO
+        var prorrogaDuration = 0
+
+        if (prorroga) {
+            prorrogaDuration = ((timeMinutes * 0.3).toInt())
+        }
 
         countUpTimer = object : CountDownTimer(duration, 1000) {
             override fun onTick(millisUntilFinished: Long) {
@@ -41,14 +49,16 @@ class CountUpTimer (private val textView: TextView, private val acrescimoView: T
                     textView.text = timeElapsedFormatted
 
                     Log.d("CountUpTimer", "$prorroga")
+
+                    /*if(counter >= timeMinutes && prorroga){
+                        resetIncrementTimer()
+                        pause()
+                        startOvertimeTimer()
+                    }
                     if (counter >= timeMinutes && !prorroga) {
-                        stop()
                         listener.onGameEnd()
-                    }
-                    if (counter >= (timeMinutes + (timeMinutes * 0.15).toInt()) && prorroga) {
-                        stop()
-                        listener.onGameEnd()
-                    }
+                    } */
+
 
                     // TODO: Precisa ativar o toggleButton
                     if(counter == timeMinutes/2){
@@ -61,6 +71,20 @@ class CountUpTimer (private val textView: TextView, private val acrescimoView: T
                         }
                         startIncrementTimer()
                         pause()
+                    }
+
+                    if(counter == timeMinutes){
+                        if (vibrator.hasVibrator() && ContextCompat.checkSelfPermission(context, Manifest.permission.VIBRATE) == PackageManager.PERMISSION_GRANTED) {
+                            val pattern = longArrayOf(0, 250, 250, 250)
+                            val repeatIndex = -1
+                            vibrator.vibrate(pattern, repeatIndex)
+                        }
+                        startIncrementTimer()
+                        pause()
+                    }
+                    else if (counter == timeMinutes + prorrogaDuration) {
+                        pause()
+                        listener.onGameEnd()
                     }
                 }
             }
@@ -118,7 +142,6 @@ class CountUpTimer (private val textView: TextView, private val acrescimoView: T
                 // Nao faz nada
             }
         }
-
         listener.onIncrementStart()
         incrementTimer.start()
     }
@@ -129,5 +152,4 @@ class CountUpTimer (private val textView: TextView, private val acrescimoView: T
             acrescimoView.text = ""
         }
     }
-
 }
