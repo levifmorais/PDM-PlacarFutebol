@@ -75,4 +75,4 @@ Caso a partida tenha ido para os pênaltis, o usuário pode adicionar os gols de
 ## Feito por
 
 - [Levi Ferreira](https://github.com/levifmorais)
-- [Márcio Jr.](https://github.com/MarcioJnr)
+- [Marcio Jr.](https://github.com/MarcioJnr)
