@@ -93,11 +93,7 @@ class Placar : AppCompatActivity(), CountUpListener {
         }
 
         btnGameEnd.setOnClickListener {
-            val resultado = StackResultado(nomeTimeUm.text.toString(), nomeTimeDois.text.toString(), golTimeUm.getValue(), golTimeDois.getValue())
-            StackResultados.push(resultado)
-            Log.d("StackResultados", StackResultados.peek().toString())
-            val intent = Intent(this, MainActivity::class.java)
-            startActivity(intent)
+            sendResult()
         }
 
 

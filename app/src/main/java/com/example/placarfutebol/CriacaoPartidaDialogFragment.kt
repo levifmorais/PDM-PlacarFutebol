@@ -77,7 +77,13 @@ class CriacaoPartidaDialogFragment : DialogFragment() {
                         val activityView = (context as Activity).window.decorView.findViewById<View>(android.R.id.content)
                         val snackbar = Snackbar.make(activityView, "Preencha todos os campos", Snackbar.LENGTH_INDEFINITE)
                         snackbar.show()
-                    } else {
+                    }
+                    else if(!switchProrroga.isChecked && switchPenalties.isChecked){
+                        val activityView = (context as Activity).window.decorView.findViewById<View>(android.R.id.content)
+                        val snackbar = Snackbar.make(activityView, "A prorrogação deve estar ativada para os pênaltis", Snackbar.LENGTH_INDEFINITE)
+                        snackbar.show()
+                    }
+                    else {
                         val editor = sharedPreferences.edit()
                         editor.putInt("timeMatch", timeMatch)
                         editor.putString("editNomeTimeUm", editNomeTimeUm)
