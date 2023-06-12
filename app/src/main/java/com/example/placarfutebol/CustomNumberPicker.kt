@@ -19,4 +19,8 @@ class CustomNumberPicker(private val newNumberPicker: NumberPicker, private val 
     fun getValue(): Int {
         return newNumberPicker.value
     }
+
+    fun setValue(value: Int) {
+        newNumberPicker.value = value
+    }
 }

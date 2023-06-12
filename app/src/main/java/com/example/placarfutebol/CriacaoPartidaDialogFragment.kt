@@ -26,7 +26,7 @@ import com.google.android.material.snackbar.Snackbar
 
 // Listener que envia a configuracao da partida para a activity de Placar
 interface CriacaoPartidaDialogListener {
-    fun onDialogPositiveClick(timeMatch : Int, editNomeTimeUm : String, editNomeTimeDois : String, switchProrrogaChecked : Boolean)
+    fun onDialogPositiveClick(timeMatch : Int, editNomeTimeUm : String, editNomeTimeDois : String, switchProrrogaChecked : Boolean, switchPenaltiesChecked: Boolean)
 }
 class CriacaoPartidaDialogFragment : DialogFragment() {
 
@@ -46,6 +46,7 @@ class CriacaoPartidaDialogFragment : DialogFragment() {
             val switchLocal = view.findViewById<LinearLayout>(R.id.Local)
             switchLocal.visibility = View.GONE
             val switchProrroga = view.findViewById<SwitchCompat>(R.id.switchProrrogacao)
+            val switchPenalties = view.findViewById<SwitchCompat>(R.id.switchPenalties) // Adicione o novo switch
 
             imageTeamOne.setImageDrawable(null)
             imageTeamTwo.setImageDrawable(null)
@@ -58,11 +59,13 @@ class CriacaoPartidaDialogFragment : DialogFragment() {
             val savedEditNomeTimeUm = sharedPreferences.getString("editNomeTimeUm", "")
             val savedEditNomeTimeDois = sharedPreferences.getString("editNomeTimeDois", "")
             val savedSwitchProrrogaChecked = sharedPreferences.getBoolean("switchProrrogaChecked", false)
+            val savedSwitchPenaltiesChecked = sharedPreferences.getBoolean("switchPenaltiesChecked", false) // Obtenha o valor do novo switch
 
             timeMatchEditText.setText(savedTimeMatch.toString())
             editNomeTimeUmEditText.setText(savedEditNomeTimeUm)
             editNomeTimeDoisEditText.setText(savedEditNomeTimeDois)
             switchProrroga.isChecked = savedSwitchProrrogaChecked
+            switchPenalties.isChecked = savedSwitchPenaltiesChecked // Defina o valor do novo switch
 
             builder.setView(view)
                 .setPositiveButton("Pronto") { _, _ ->
@@ -80,9 +83,16 @@ class CriacaoPartidaDialogFragment : DialogFragment() {
                         editor.putString("editNomeTimeUm", editNomeTimeUm)
                         editor.putString("editNomeTimeDois", editNomeTimeDois)
                         editor.putBoolean("switchProrrogaChecked", switchProrroga.isChecked)
+                        editor.putBoolean("switchPenaltiesChecked", switchPenalties.isChecked) // Salve o valor do novo switch
                         editor.apply()
 
-                        dialogListener?.onDialogPositiveClick(timeMatch, editNomeTimeUm, editNomeTimeDois, switchProrroga.isChecked)
+                        dialogListener?.onDialogPositiveClick(
+                            timeMatch,
+                            editNomeTimeUm,
+                            editNomeTimeDois,
+                            switchProrroga.isChecked,
+                            switchPenalties.isChecked // Passe o valor do novo switch
+                        )
                     }
                 }
                 .setNegativeButton("Cancelar") { _, _ ->

@@ -23,12 +23,15 @@ class Placar : AppCompatActivity(), CountUpListener {
     private lateinit var timer : CountUpTimer
     private lateinit var btnGameEnd : Button
     private lateinit var btnIntervalo : Button
+    private var penalties: Boolean = false
+
 
     @SuppressLint("SetTextI18n")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_placar)
 
+        penalties = intent.getBooleanExtra("switchPenaltiesChecked", false)
 
         btnIntervalo = findViewById(R.id.btnIntervalo)
         btnIntervalo.visibility = Button.GONE
@@ -121,9 +124,26 @@ class Placar : AppCompatActivity(), CountUpListener {
     }
 
     override fun onGameEnd() {
+        Log.d("Placar", "onGameEnd() chamada goltime")
         btnGameEnd.visibility = Button.VISIBLE
         btnStart.visibility = ToggleButton.GONE
-        sendResult()
+        Log.d("Placar", "Empate: ${golTimeUm.getValue()} - ${golTimeDois.getValue()}")
+        if (golTimeUm.getValue() == golTimeDois.getValue()) {
+            Log.d("StackResultados", penalties.toString())
+            if (penalties)
+            {
+                // Inicie os pênaltis
+                startPenaltiesActivity()
+            }
+            else
+            {
+                sendResult()
+            }
+        }
+        else
+        {
+            sendResult()
+        }
     }
 
     override fun onIncrementStart() {
@@ -143,4 +163,26 @@ class Placar : AppCompatActivity(), CountUpListener {
         val intent = Intent(this, MainActivity::class.java)
         startActivity(intent)
     }
+
+    private fun startPenaltiesActivity() {
+        val intent = Intent(this, PenaltiesActivity::class.java)
+        intent.putExtra("teamOneName", nomeTimeUm.text.toString())
+        intent.putExtra("teamTwoName", nomeTimeDois.text.toString())
+        startActivityForResult(intent, PenaltiesActivity.PENALTIES_REQUEST_CODE)
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+
+        if (requestCode == PenaltiesActivity.PENALTIES_REQUEST_CODE && resultCode == RESULT_OK && data != null) {
+            val teamOnePenaltyScore = data.getIntExtra("teamOneScore", 0)
+            val teamTwoPenaltyScore = data.getIntExtra("teamTwoScore", 0)
+
+            // Atualize os gols dos times com os valores dos pênaltis
+            golTimeUm.setValue(teamOnePenaltyScore)
+            golTimeDois.setValue(teamTwoPenaltyScore)
+        }
+    }
+
+
 }

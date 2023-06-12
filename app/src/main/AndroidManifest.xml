@@ -17,6 +17,10 @@
             android:name=".Placar"
             android:exported="false" />
         <activity
+            android:name=".PenaltiesActivity"
+            android:exported="false"
+            android:screenOrientation="landscape" />
+        <activity
             android:name=".MainActivity"
             android:exported="true">
             <intent-filter>

@@ -27,6 +27,8 @@ class CountUpTimer (private val textView: TextView, private val acrescimoView: T
     private lateinit var incrementTimer: CountDownTimer
     private lateinit var overtimeTimer: CountDownTimer
     private lateinit var countUpTimer: CountDownTimer
+    private var penalties: Boolean = false
+
 
     fun start() {
         counter = 0

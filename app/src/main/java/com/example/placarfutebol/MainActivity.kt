@@ -40,13 +40,16 @@ class MainActivity : AppCompatActivity(), CriacaoPartidaDialogListener {
         timeMatch: Int,
         editNomeTimeUm: String,
         editNomeTimeDois: String,
-        switchProrrogaChecked: Boolean
+        switchProrrogaChecked: Boolean,
+        switchPenaltiesChecked: Boolean
     ) {
         val intent = Intent(this, Placar::class.java)
         intent.putExtra("timeMatch", timeMatch)
         intent.putExtra("editNomeTimeUm", editNomeTimeUm)
         intent.putExtra("editNomeTimeDois", editNomeTimeDois)
         intent.putExtra("switchProrrogaChecked", switchProrrogaChecked)
+        intent.putExtra("switchPenaltiesChecked", switchPenaltiesChecked)
         startActivity(intent)
     }
+
 }
