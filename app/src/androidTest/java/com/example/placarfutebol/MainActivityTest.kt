@@ -61,5 +61,87 @@ class MainActivityTest {
 
     }
 
+@Test
+        fun semUmDosTimes() {
 
+            //teste para verificar se existe tratamento para quando informações não forem preenchidas
+
+            onView(withId(R.id.btnCriarPartida)).perform(click())
+            onView(withId(R.id.tempoTextNumber)).check(matches(isDisplayed()))
+            onView(withId(R.id.tempoTextNumber)).perform(clearText(), typeText("90"))
+            onView(withId(R.id.editNomeTimeUm)).perform(clearText(), typeText("Fortaleza"))
+            onView(withId(R.id.editNomeTimeDois)).perform(clearText())
+            onView(withText("Pronto")).perform(click())
+            onView(withText("Preencha todos os campos")).check(matches(isDisplayed()))
+
+        }
+        @Test
+        fun prorrogacao() {
+
+            //teste para verificar se a prorrogação funciona
+
+            val tempoTotal = 1
+            val metadeTempoEmMilissegundos = (tempoTotal * 60 * 1000) / 2 // Converter metade do tempo para milissegundos
+
+            onView(withId(R.id.btnCriarPartida)).perform(click())
+            onView(withId(R.id.tempoTextNumber)).check(matches(isDisplayed()))
+            onView(withId(R.id.tempoTextNumber)).perform(clearText(), typeText(tempoTotal.toString()))
+            onView(withId(R.id.editNomeTimeUm)).perform(clearText(), typeText("Fortaleza"))
+            onView(withId(R.id.editNomeTimeDois)).perform(clearText(), typeText("Ceara"))
+            onView(withId(R.id.switchProrrogacao)).check(matches(isChecked()))
+            onView(withText("Pronto")).perform(click())
+            onView(withId(R.id.btnStartTimer)).check(matches(isDisplayed()))
+            Thread.sleep(3000)
+            onView(withId(R.id.btnStartTimer)).perform(click())
+            Thread.sleep(metadeTempoEmMilissegundos.toLong())
+            onView(withId(R.id.btnIntervalo)).perform(click())
+            onView(withId(R.id.btnStartTimer)).perform(click())
+            Thread.sleep(metadeTempoEmMilissegundos.toLong())
+            onView(withId(R.id.btnIntervalo)).perform(click())
+            onView(withId(R.id.btnStartTimer)).perform(click())
+            Thread.sleep(metadeTempoEmMilissegundos.toLong())
+            onView(withId(R.id.btnCriarPartida)).check(matches(isDisplayed()))
+
+
+        }
+
+        @Test
+        fun penalties() {
+
+            //teste para verificar se os penaltis funcionam
+
+            val tempoTotal = 1
+            val metadeTempoEmMilissegundos = (tempoTotal * 60 * 1000) / 2 // Converter metade do tempo para milissegundos
+
+            onView(withId(R.id.btnCriarPartida)).perform(click())
+            onView(withId(R.id.tempoTextNumber)).check(matches(isDisplayed()))
+            onView(withId(R.id.tempoTextNumber)).perform(clearText(), typeText(tempoTotal.toString()))
+            onView(withId(R.id.editNomeTimeUm)).perform(clearText(), typeText("Fortaleza"))
+            onView(withId(R.id.editNomeTimeDois)).perform(clearText(), typeText("Ceara"))
+            onView(withId(R.id.switchProrrogacao)).check(matches(isChecked()))
+            onView(withId(R.id.switchPenalties)).check(matches(isChecked()))
+            onView(withText("Pronto")).perform(click())
+            onView(withId(R.id.btnStartTimer)).check(matches(isDisplayed()))
+            Thread.sleep(3000)
+            onView(withId(R.id.btnStartTimer)).perform(click())
+            Thread.sleep(metadeTempoEmMilissegundos.toLong())
+            onView(withId(R.id.btnIntervalo)).perform(click())
+            onView(withId(R.id.btnStartTimer)).perform(click())
+            Thread.sleep(metadeTempoEmMilissegundos.toLong())
+            onView(withId(R.id.btnIntervalo)).perform(click())
+            onView(withId(R.id.btnStartTimer)).perform(click())
+            Thread.sleep(metadeTempoEmMilissegundos.toLong())
+            onView(withId(R.id.textViewTeamOne)).check(matches(isDisplayed()))
+            onView(withId(R.id.buttonTeamOneGoal)).perform(click())
+            onView(withId(R.id.buttonTeamTwoMiss)).perform(click())
+            onView(withId(R.id.buttonTeamOneGoal)).perform(click())
+            onView(withId(R.id.buttonTeamTwoMiss)).perform(click())
+            onView(withId(R.id.buttonTeamOneGoal)).perform(click())
+            onView(withId(R.id.buttonTeamTwoMiss)).perform(click())
+            onView(withId(R.id.buttonTeamOneGoal)).perform(click())
+            onView(withId(R.id.buttonTeamTwoMiss)).perform(click())
+            onView(withId(R.id.buttonTeamOneGoal)).perform(click())
+            onView(withId(R.id.buttonTeamTwoMiss)).perform(click())
+            onView(withId(R.id.golUm)).check(matches(isDisplayed()))
+        }
 }
