@@ -3,7 +3,7 @@
   <component name="AndroidTestResultsUserPreferences">
     <option name="androidTestResultsTableState">
       <map>
-        <entry key="409706144">
+        <entry key="-1279999286">
           <value>
             <AndroidTestResultsTableState>
               <option name="preferredColumnWidths">
@@ -11,6 +11,21 @@
                   <entry key="Duration" value="90" />
                   <entry key="Pixel_2_API_29" value="120" />
                   <entry key="Tests" value="360" />
+                </map>
+              </option>
+            </AndroidTestResultsTableState>
+          </value>
+        </entry>
+        <entry key="409706144">
+          <value>
+            <AndroidTestResultsTableState>
+              <option name="preferredColumnWidths">
+                <map>
+                  <entry key="6e787a83" value="120" />
+                  <entry key="Duration" value="90" />
+                  <entry key="Pixel_2_API_29" value="120" />
+                  <entry key="Tests" value="360" />
+                  <entry key="Xiaomi&#10; Mi 9 SE" value="120" />
                 </map>
               </option>
             </AndroidTestResultsTableState>
