@@ -63,7 +63,6 @@ import org.junit.runner.RunWith
 
         @Test
         fun testTextViewUpdates() {
-            // Verify if the TextViews are updated correctly based on the logic in your onCreate() method
             onView(withId(R.id.tempoDePartida)).check(matches(withText("1°")))
             onView(withId(R.id.duracaoDePartida)).check(matches(withText("00:00")))
             onView(withId(R.id.acrescimosDePartida)).check(matches(withText("")))
@@ -71,11 +70,10 @@ import org.junit.runner.RunWith
 
         @Test
         fun testCustomNumberPickerInteraction() {
-            // Example: Test incrementing and decrementing the goal values using CustomNumberPicker
             //onView(withId(R.id.golUm)).perform(swipeUp()) // Increment goal for team one
             //onView(withId(R.id.golUm)).perform(replaceText("5"), closeSoftKeyboard())
             //onView(withId(R.id.golDois)).perform(swipeDown()) // Decrement goal for team two
-            // Add more interactions and assertions to test CustomNumberPicker functionality
+
         }
 
 

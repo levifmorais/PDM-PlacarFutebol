@@ -55,7 +55,7 @@ class MainActivityTest {
             onView(withId(R.id.switchProrrogacao)).perform(click())
             onView(withId(R.id.switchPenalties)).perform(click())
 
-            onView(withText("OK")).perform(click())
+            onView(withText("Pronto")).perform(click())
 
             Intents.intended(hasComponent(Placar::class.java.name))
 
